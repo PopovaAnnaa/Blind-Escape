@@ -41,6 +41,10 @@ public class MonsterAI : MonoBehaviour
     public static System.Action OnPlayerCaught;
     public static System.Action<AIState> OnAIStateChanged;
 
+    // Animation
+    private Vector2 movingDirection = new Vector2(0, 0);
+    private bool isRunning = false;
+
     private void Update()
     {
         UpdatePerception();
@@ -208,20 +212,24 @@ public class MonsterAI : MonoBehaviour
             Vector3 targetPosition = currentPath[currentPathIndex];
             float speed = baseSpeed * (currentState == AIState.Chase ? 1.6f : 1.0f);
 
+            Vector2 direction = (targetPosition - transform.position).normalized;
+
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
 
-            // Поворот спрайта у напрямку руху
-            Vector3 moveDir = (targetPosition - transform.position).normalized;
-            if (moveDir != Vector3.zero)
+            if (direction != Vector2.zero)
             {
-                float angle = Mathf.Atan2(moveDir.y, moveDir.x) * Mathf.Rad2Deg - 90f;
-                transform.rotation = Quaternion.Euler(0, 0, angle);
+                movingDirection = direction;
+                isRunning = true;
             }
 
             if (Vector3.Distance(transform.position, targetPosition) < 0.1f)
             {
                 currentPathIndex++;
             }
+        }
+        else
+        {
+            isRunning = false;
         }
     }
 
@@ -248,5 +256,15 @@ public class MonsterAI : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawRay(transform.position, leftDir * viewDistance);
         Gizmos.DrawRay(transform.position, rightDir * viewDistance);
+    }
+
+    public bool IsRunning()
+    {
+        return isRunning;
+    }
+
+    public Vector2 GetMovementDirection()
+    {
+        return movingDirection;
     }
 }
