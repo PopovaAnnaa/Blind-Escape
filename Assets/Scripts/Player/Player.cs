@@ -13,8 +13,15 @@ public class Player : MonoBehaviour
 
     private Rigidbody2D rb;
 
-    private void Awake() {
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
+        DontDestroyOnLoad(gameObject);
 
         rb = GetComponent<Rigidbody2D>();
     }
