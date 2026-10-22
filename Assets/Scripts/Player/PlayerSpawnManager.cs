@@ -21,6 +21,8 @@ public class PlayerSpawnManager : MonoBehaviour
                     break;
                 }
             }
+
+            DoorTransition.targetDoorId = null;
         }
 
         CinemachineCamera vcam = FindFirstObjectByType<CinemachineCamera>();

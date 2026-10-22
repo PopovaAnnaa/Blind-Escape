@@ -5,6 +5,7 @@ public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }
     [SerializeField] private float movingSpeed = 7f;
+    public bool hasKeycard = false;
 
     private float minMovingSpeed = 0.1f;
     private bool isRunning = false;
